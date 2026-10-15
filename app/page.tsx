@@ -55,6 +55,12 @@ export default function Page() {
           <a className="nav-contact" href="#contato" onClick={() => handleNav('Contato')}>Fale conosco <ArrowUpRight aria-hidden="true" /></a>
         </nav>
 
+        <div className="profile-area">
+          <button className="profile-button" type="button" aria-label="Abrir perfil">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-QFo8bDq5dsbQf2NDow1hxKHZ3QF4bA.png" alt="Perfil do usuário" />
+          </button>
+        </div>
+
         <button className="menu-button" type="button" aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
           {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
