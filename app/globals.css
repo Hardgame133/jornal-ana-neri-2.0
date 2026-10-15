@@ -19,7 +19,7 @@ body { margin: 0; background: var(--ink); color: var(--paper); font-family: Aria
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 
-.site-shell { min-height: 100vh; overflow: hidden; position: relative; background: linear-gradient(rgba(5, 4, 7, .28), rgba(5, 4, 7, .62)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-omXg9aX9TL3hnVt2MSArwjEkrP2UMO.png') center top / cover fixed; }
+.site-shell { min-height: 100vh; overflow: hidden; position: relative; background: linear-gradient(rgba(5, 4, 7, .28), rgba(5, 4, 7, .62)), url('https://unsplash.com/photos/CbCifdZDr0U/download?force=true') center top / cover fixed; }
 .grain { position: fixed; inset: 0; pointer-events: none; opacity: .08; z-index: 10; background-image: radial-gradient(rgba(255,255,255,.55) .45px, transparent .55px); background-size: 5px 5px; mix-blend-mode: screen; }
 .topbar { width: min(1240px, calc(100% - 48px)); margin: 0 auto; padding: 28px 0; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 20; }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 15px; letter-spacing: .22em; font-weight: 700; }
