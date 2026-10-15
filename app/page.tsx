@@ -109,7 +109,7 @@ export default function Page() {
         </div>
       </section>
 
-      <footer><span>© 2024 NOVA STUDIO</span><span>Feito com intenção.</span></footer>
+      <footer></footer>
     </main>
   )
 }
