@@ -61,11 +61,8 @@ export default function Page() {
       </header>
 
       <section className="hero" id="inicio">
-        <p className="eyebrow">Estúdio independente · São Paulo</p>
         <h1>Histórias que<br /><em>merecem</em> movimento.</h1>
-        <p className="hero-copy">Criamos filmes, imagens e experiências digitais para marcas que não querem passar despercebidas.</p>
         <a className="scroll-cue" href="#projetos" aria-label="Ir para projetos"><span>Explorar trabalhos</span><ArrowDown aria-hidden="true" /></a>
-        <div className="hero-orb hero-orb-one" aria-hidden="true" />
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
       </section>
 
