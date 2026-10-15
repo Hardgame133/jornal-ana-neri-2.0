@@ -39,6 +39,8 @@ button { font: inherit; }
 .hero { min-height: 730px; width: min(1240px, calc(100% - 48px)); margin: 0 auto; padding: 170px 8.5% 100px; position: relative; display: flex; flex-direction: column; justify-content: center; }
 .eyebrow, .section-kicker { color: var(--soft); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
 .hero h1 { max-width: 900px; margin: -58px auto 0; text-align: center; font-family: Georgia, serif; font-size: clamp(42px, 6.5vw, 88px); line-height: .92; letter-spacing: -.06em; font-style: italic; font-weight: 400; }
+.fade-on-scroll { opacity: 1; transform: translateY(0); filter: blur(0); transition: opacity .45s ease, transform .45s ease, filter .45s ease; }
+.fade-on-scroll.is-past-navbar { opacity: .08; transform: translateY(-14px); filter: blur(4px); pointer-events: none; }
 em { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.08em; }
 .hero-copy { max-width: 330px; color: var(--soft); font-size: 15px; line-height: 1.55; }
 .scroll-cue { display: flex; align-items: center; gap: 14px; margin-top: 72px; width: max-content; color: var(--paper); font-size: 11px; text-transform: uppercase; letter-spacing: .15em; }

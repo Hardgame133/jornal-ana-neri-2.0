@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUpRight, Menu, Play, X } from 'lucide-react'
 
 const posts = [
@@ -30,6 +30,23 @@ const posts = [
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [active, setActive] = useState('Início')
+
+  useEffect(() => {
+    const updateFadingElements = () => {
+      const headerBottom = document.querySelector('.topbar')?.getBoundingClientRect().bottom ?? 90
+      document.querySelectorAll<HTMLElement>('.fade-on-scroll').forEach((element) => {
+        element.classList.toggle('is-past-navbar', element.getBoundingClientRect().bottom <= headerBottom + 8)
+      })
+    }
+
+    updateFadingElements()
+    window.addEventListener('scroll', updateFadingElements, { passive: true })
+    window.addEventListener('resize', updateFadingElements)
+    return () => {
+      window.removeEventListener('scroll', updateFadingElements)
+      window.removeEventListener('resize', updateFadingElements)
+    }
+  }, [])
 
   const handleNav = (label: string) => {
     setActive(label)
@@ -67,7 +84,7 @@ export default function Page() {
       </header>
 
       <section className="hero" id="inicio">
-        <h1 style={{ fontStyle: 'italic' }}>Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.</h1>
+        <h1 className="fade-on-scroll" style={{ fontStyle: 'italic' }}>Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.</h1>
         <a className="scroll-cue" href="#projetos" aria-label="Ir para projetos"></a>
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
       </section>
@@ -75,7 +92,7 @@ export default function Page() {
       <section className="projects" id="projetos">
         <div className="post-list">
           {posts.map((post) => (
-            <article className={`post-card ${post.accent}`} key={post.number}>
+            <article className={`post-card fade-on-scroll ${post.accent}`} key={post.number}>
               <div className="post-meta"><span>{post.number}</span><span>{post.category}</span></div>
               <div className="video-frame" role="img" aria-label={`Área reservada para o vídeo ${post.number}`}>
                 <div className="video-glow" />
