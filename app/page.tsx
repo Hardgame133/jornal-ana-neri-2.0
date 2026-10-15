@@ -40,10 +40,6 @@ export default function Page() {
     <main className="site-shell">
       <div className="grain" aria-hidden="true" />
       <header className="topbar">
-        <a className="brand" href="#inicio" onClick={() => handleNav('Início')} aria-label="NOVA página inicial">
-          <span className="brand-mark">N</span>
-          <span>NOVA<span className="brand-dot">.</span></span>
-        </a>
 
         <nav className={`nav-pill ${menuOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
           {['Início', 'Projetos', 'Sobre', 'Contato'].map((item) => (
