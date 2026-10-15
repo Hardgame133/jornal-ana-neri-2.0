@@ -106,11 +106,6 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="contact" id="contato">
-        <p className="section-kicker">03 / próximo passo</p>
-        <h2>Tem uma história<br /><em>para contar?</em></h2>
-        <a className="contact-link" href="mailto:hello@nova.studio">hello@nova.studio <ArrowUpRight aria-hidden="true" /></a>
-      </section>
       <footer><span>© 2024 NOVA STUDIO</span><span>Feito com intenção.</span></footer>
     </main>
   )
