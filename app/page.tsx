@@ -67,7 +67,7 @@ export default function Page() {
       </header>
 
       <section className="hero" id="inicio">
-        <h1>Histórias que<br /><em>merecem</em> movimento.</h1>
+        <h1 style={{ fontStyle: 'italic' }}>Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.</h1>
         <a className="scroll-cue" href="#projetos" aria-label="Ir para projetos"></a>
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
       </section>
