@@ -68,7 +68,7 @@ export default function Page() {
 
       <section className="hero" id="inicio">
         <h1>Histórias que<br /><em>merecem</em> movimento.</h1>
-        <a className="scroll-cue" href="#projetos" aria-label="Ir para projetos"><span>Explorar trabalhos</span></a>
+        <a className="scroll-cue" href="#projetos" aria-label="Ir para projetos"></a>
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
       </section>
 
