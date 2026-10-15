@@ -59,7 +59,7 @@ export default function Page() {
       <header className="topbar">
 
         <nav className={`nav-pill ${menuOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
-          {['Início', 'Projetos', 'Sobre', 'Contato'].map((item) => (
+          {['Início', 'Projetos', 'Sobre'].map((item) => (
             <a
               href={`#${item === 'Início' ? 'inicio' : item.toLowerCase()}`}
               key={item}
