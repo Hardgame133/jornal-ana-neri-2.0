@@ -93,14 +93,13 @@ export default function Page() {
         <div className="post-list">
           {posts.map((post) => (
             <article className={`post-card fade-on-scroll ${post.accent}`} key={post.number}>
-              <div className="post-meta"><span>{post.category}</span></div>
               <div className="video-frame" role="img" aria-label={`Área reservada para o vídeo ${post.number}`}>
                 <div className="video-glow" />
                 <div className="video-lines" />
                 <button className="play-button" type="button" aria-label={`Reproduzir vídeo ${post.number}`}><Play fill="currentColor" aria-hidden="true" /></button>
                 <span className="video-label">SEU VÍDEO AQUI</span>
               </div>
-              <div className="post-copy"><h3>{post.title}</h3><p>{post.description}</p><a href="#contato">Ver projeto <ArrowUpRight aria-hidden="true" /></a></div>
+              <div className="post-copy"><h3>{post.title}</h3><p>{post.description}</p></div>
             </article>
           ))}
         </div>
