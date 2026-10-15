@@ -72,19 +72,7 @@ export default function Page() {
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
       </section>
 
-      <section className="intro" id="sobre">
-        <p className="section-kicker">01 / manifesto</p>
-        <div className="intro-grid">
-          <h2>Não fazemos<br /><em>mais do mesmo.</em></h2>
-          <p>Do primeiro rascunho ao último corte, colocamos intenção em cada detalhe. Nosso trabalho nasce da curiosidade e termina em algo que você quer assistir de novo.</p>
-        </div>
-      </section>
-
       <section className="projects" id="projetos">
-        <div className="section-heading">
-          <div><p className="section-kicker">02 / seleção</p><h2>Posts em destaque</h2></div>
-          <span className="project-count">03 — 03</span>
-        </div>
         <div className="post-list">
           {posts.map((post) => (
             <article className={`post-card ${post.accent}`} key={post.number}>
