@@ -39,6 +39,11 @@ button { font: inherit; }
 .hero { min-height: 730px; width: min(1240px, calc(100% - 48px)); margin: 0 auto; padding: 170px 8.5% 100px; position: relative; display: flex; flex-direction: column; justify-content: center; }
 .eyebrow, .section-kicker { color: var(--soft); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
 .hero h1 { max-width: 900px; margin: -58px auto 0; text-align: center; font-family: Georgia, serif; font-size: clamp(42px, 6.5vw, 88px); line-height: .92; letter-spacing: -.06em; font-style: italic; font-weight: 400; }
+.hero-tabs { display: flex; justify-content: center; gap: 10px; margin: 34px auto 0; }
+.hero-tab { display: grid; place-items: center; min-width: 150px; padding: 13px 28px; border-radius: 999px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; transition: transform .28s ease, box-shadow .28s ease, background-color .28s ease; }
+.hero-tab:hover, .hero-tab:focus-visible, .hero-tab:active { transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,.3); }
+.hero-tab-light { color: var(--ink); background: var(--paper); }
+.hero-tab-dark { color: var(--paper); background: #222223; border: 1px solid rgba(255,255,255,.16); }
 .fade-on-scroll { opacity: 1; transform: translateY(0); filter: blur(0); transition: opacity .45s ease, transform .45s ease, filter .45s ease; }
 .fade-on-scroll.is-past-navbar { opacity: .08; transform: translateY(-14px); filter: blur(4px); pointer-events: none; }
 em { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.08em; }

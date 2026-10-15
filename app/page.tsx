@@ -85,6 +85,10 @@ export default function Page() {
 
       <section className="hero" id="inicio">
         <h1 className="fade-on-scroll" style={{ fontStyle: 'italic' }}>Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.</h1>
+        <div className="hero-tabs" aria-label="Navegação rápida">
+          <a className="hero-tab hero-tab-light" href="#projetos">Projetos</a>
+          <a className="hero-tab hero-tab-dark" href="#sobre">Sobre</a>
+        </div>
         <a className="scroll-cue" href="#projetos" aria-label="Ir para projetos"></a>
         <div className="hero-orb hero-orb-two" aria-hidden="true" />
       </section>
