@@ -16,9 +16,6 @@ const projects = [
   ['Arquitetura', 'Espaços que contam', 'Imagens e narrativas sobre lugares que guardam memórias e despertam sentidos.'],
   ['Educação', 'Aprender é descobrir', 'Experiências visuais para tornar o conhecimento mais próximo, humano e inspirador.'],
   ['Comunidade', 'Feito em conjunto', 'Histórias construídas com escuta, colaboração e participação de todos.'],
-  ['Experimentação', 'Novos caminhos', 'Pesquisa visual para testar linguagens, materiais e possibilidades inesperadas.'],
-  ['Memória', 'O tempo presente', 'Registros que preservam momentos importantes e conectam passado e futuro.'],
-  ['Futuro', 'Sempre em movimento', 'Uma visão aberta para novas histórias, encontros e possibilidades criativas.'],
 ]
 
 export default function ProjetosPage() {
