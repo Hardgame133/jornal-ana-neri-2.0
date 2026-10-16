@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { NetworkRecovery } from './components/network-recovery'
 
 export const metadata: Metadata = {
   title: 'NOVA — Histórias em movimento',
@@ -42,6 +43,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="antialiased">
         {children}
+        <NetworkRecovery />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

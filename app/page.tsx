@@ -39,12 +39,22 @@ export default function Page() {
       })
     }
 
+    let frame = 0
+    const scheduleFadeUpdate = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(() => {
+        frame = 0
+        updateFadingElements()
+      })
+    }
+
     updateFadingElements()
-    window.addEventListener('scroll', updateFadingElements, { passive: true })
-    window.addEventListener('resize', updateFadingElements)
+    window.addEventListener('scroll', scheduleFadeUpdate, { passive: true })
+    window.addEventListener('resize', scheduleFadeUpdate)
     return () => {
-      window.removeEventListener('scroll', updateFadingElements)
-      window.removeEventListener('resize', updateFadingElements)
+      window.removeEventListener('scroll', scheduleFadeUpdate)
+      window.removeEventListener('resize', scheduleFadeUpdate)
+      if (frame) window.cancelAnimationFrame(frame)
     }
   }, [])
 
