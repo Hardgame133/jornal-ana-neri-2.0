@@ -107,6 +107,16 @@ export default function Page() {
             </article>
           ))}
         </div>
+        <section className="school-info" aria-labelledby="school-info-title">
+          <p className="section-kicker">Escola Ana Neri</p>
+          <h2 id="school-info-title">Educação, conhecimento e amizade em Porto Alegre!</h2>
+          <div className="school-info-copy">
+            <p>A Escola Ana Neri, localizada em Porto Alegre (RS), perto do Triângulo, é um espaço de aprendizado, convivência e novas descobertas. No dia a dia, alunos e professores compartilham conhecimentos, desenvolvem habilidades e constroem amizades.</p>
+            <p>A escola tem um papel muito importante na formação dos estudantes, incentivando o respeito, a responsabilidade, a criatividade e a união. Além das aulas, o ambiente escolar proporciona experiências que contribuem para o crescimento pessoal e para a preparação dos alunos para o futuro.</p>
+            <p>A Escola Ana Neri é mais do que um lugar para estudar: é um espaço para aprender, fazer amigos e construir sonhos!</p>
+            <p className="school-info-signature">Jornal Escolar Ana Neri — informação, educação e comunidade</p>
+          </div>
+        </section>
       </section>
 
       <footer></footer>
