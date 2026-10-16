@@ -61,7 +61,7 @@ export default function Page() {
         <nav className={`nav-pill ${menuOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
           {['Início', 'Projetos', 'Sobre'].map((item) => (
             <a
-              href={`#${item === 'Início' ? 'inicio' : item.toLowerCase()}`}
+              href={item === 'Início' ? '/' : `/${item.toLowerCase()}`}
               key={item}
               className={active === item ? 'active' : ''}
               onClick={() => handleNav(item)}
