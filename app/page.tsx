@@ -102,8 +102,8 @@ export default function Page() {
             <p className="login-eyebrow">Acesso ao perfil</p>
             <h2 id="login-title">Login</h2>
             <div className="login-options">
-              <button className="login-option" type="button"><span className="google-mark" aria-hidden="true">G</span><span>Entrar com o Google</span></button>
-              <button className="login-option" type="button"><span className="instagram-mark" aria-hidden="true">◎</span><span>Entrar com o Instagram</span></button>
+              <button className="login-option" type="button"><img className="social-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Mhu2aXc5VFDwd3RSbXuIXbAu2xPlJe.png" alt="" /><span>Entrar com o Google</span></button>
+              <button className="login-option" type="button"><img className="social-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KpYwpp03pN89HaEftO4HXsSMYxgITu.png" alt="" /><span>Entrar com o Instagram</span></button>
             </div>
           </section>
         </div>
