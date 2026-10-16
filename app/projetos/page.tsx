@@ -18,9 +18,8 @@ export default function ProjetosPage() {
           <Link href="/">Início</Link><Link className="active" href="/projetos">Projetos</Link><Link href="/sobre">Sobre</Link>
         </nav>
       </header>
-      <section className="inner-hero"><p className="section-kicker">Portfólio</p><h1>Projetos que<br /><em>ganham movimento.</em></h1><p>Conheça alguns dos estudos e experiências que traduzem nossa forma de contar histórias.</p></section>
       <section className="inner-project-list" aria-label="Projetos da escola">
-        {projects.map(([category, title, description]) => <article className="post-card inner-card" key={title}><div className="video-frame"><button className="play-button" type="button" aria-label={`Reproduzir ${title}`}><Play fill="currentColor" aria-hidden="true" /></button><span className="video-label">SEU VÍDEO AQUI</span></div><div className="post-copy"><span className="section-kicker">{category}</span><h2>{title}</h2><p>{description}</p></div></article>)}
+        {projects.map(([category, title]) => <article className="project-video-card" key={title}><div className="video-frame"><button className="play-button" type="button" aria-label={`Reproduzir ${title}`}><Play fill="currentColor" aria-hidden="true" /></button><span className="video-label">SEU VÍDEO AQUI</span></div></article>)}
       </section>
     </main>
   )
