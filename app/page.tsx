@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUpRight, Menu, Play, X } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Clock3, Mail, MapPin, Menu, Play, X } from 'lucide-react'
 
 const posts = [
   {
@@ -119,7 +119,29 @@ export default function Page() {
         </section>
       </section>
 
-      <footer></footer>
+      <footer className="site-footer" id="informacoes">
+        <div className="footer-main">
+          <div className="footer-brand">
+            <div className="footer-mark" aria-hidden="true">AN</div>
+            <h2>Escola Ana Neri</h2>
+            <p>Educação, conhecimento e amizade em Porto Alegre. Um espaço de aprendizado, convivência e novas descobertas.</p>
+            <span className="footer-origin">Desde 1958, formando histórias.</span>
+          </div>
+          <div className="footer-links">
+            <h3>Links rápidos</h3>
+            <a href="#inicio">Início</a>
+            <a href="#projetos">Projetos</a>
+            <a href="#informacoes">Sobre a escola</a>
+          </div>
+          <div className="footer-contact">
+            <h3>Informações</h3>
+            <p><MapPin aria-hidden="true" /> Avenida Joaquim Silveira, 738<br />São Sebastião, Porto Alegre/RS</p>
+            <p><Clock3 aria-hidden="true" /> Atendimento à comunidade escolar</p>
+            <p><Mail aria-hidden="true" /> Secretaria da Escola Ana Neri</p>
+          </div>
+        </div>
+        <div className="footer-bottom"><span>Escola Estadual de Ensino Fundamental Ana Neri</span><span>Porto Alegre, RS</span></div>
+      </footer>
     </main>
   )
 }
