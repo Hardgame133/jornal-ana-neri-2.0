@@ -29,6 +29,7 @@ const posts = [
 
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
   const [active, setActive] = useState('Início')
 
   useEffect(() => {
@@ -74,6 +75,7 @@ export default function Page() {
               href={item === 'Início' ? '/' : `/${item.toLowerCase()}`}
               key={item}
               className={active === item ? 'active' : ''}
+              onPointerDown={() => setActive(item)}
               onClick={() => handleNav(item)}
             >
               {item}
@@ -83,7 +85,7 @@ export default function Page() {
         </nav>
 
         <div className="profile-area">
-          <button className="profile-button" type="button" aria-label="Abrir perfil">
+          <button className="profile-button" type="button" aria-label="Abrir perfil" aria-haspopup="dialog" aria-expanded={loginOpen} onClick={() => setLoginOpen(true)}>
             <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-QFo8bDq5dsbQf2NDow1hxKHZ3QF4bA.png" alt="Perfil do usuário" />
           </button>
         </div>
@@ -92,6 +94,20 @@ export default function Page() {
           {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
       </header>
+
+      {loginOpen && (
+        <div className="login-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setLoginOpen(false) }}>
+          <section className="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+            <button className="login-close" type="button" aria-label="Fechar login" onClick={() => setLoginOpen(false)}><X aria-hidden="true" /></button>
+            <p className="login-eyebrow">Acesso ao perfil</p>
+            <h2 id="login-title">Login</h2>
+            <div className="login-options">
+              <button className="login-option" type="button"><span className="google-mark" aria-hidden="true">G</span><span>Entrar com o Google</span></button>
+              <button className="login-option" type="button"><span className="instagram-mark" aria-hidden="true">◎</span><span>Entrar com o Instagram</span></button>
+            </div>
+          </section>
+        </div>
+      )}
 
       <section className="hero" id="inicio">
         <h1 className="fade-on-scroll" style={{ fontStyle: 'italic' }}>Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.</h1>
