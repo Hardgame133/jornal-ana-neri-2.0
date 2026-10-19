@@ -85,8 +85,8 @@ export default function Page() {
         </nav>
 
         <div className="profile-area">
-          <button className="profile-button" type="button" aria-label="Abrir perfil" aria-haspopup="dialog" aria-expanded={loginOpen} onClick={() => setLoginOpen(true)}>
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-QFo8bDq5dsbQf2NDow1hxKHZ3QF4bA.png" alt="Perfil do usuário" />
+          <button className="profile-button" type="button" aria-label="Abrir configurações da conta" aria-haspopup="dialog" aria-expanded={loginOpen} onClick={() => setLoginOpen(true)}>
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" alt="Nuvem com engrenagem" />
           </button>
         </div>
 

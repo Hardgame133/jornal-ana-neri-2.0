@@ -33,7 +33,7 @@ button { font: inherit; }
 .profile-area { position: absolute; top: 22px; right: 0; }
 .profile-button { display: grid; place-items: center; width: 48px; height: 48px; padding: 4px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; background: rgba(20,20,21,.78); box-shadow: 0 8px 24px rgba(0,0,0,.24); cursor: pointer; transition: transform .25s ease, border-color .25s ease; }
 .profile-button:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.7); }
-.profile-button img { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
+.profile-button img { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: contain; background: #fff; padding: 5px; }
 .login-overlay { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; background: rgba(54,54,55,.78); backdrop-filter: blur(7px); animation: login-fade-in .2s ease both; }
 .login-modal { position: relative; isolation: isolate; width: min(100%, 360px); padding: 34px 24px 24px; border: 1px solid rgba(255,255,255,.18); border-radius: 24px; background: #171719; box-shadow: 0 28px 80px rgba(0,0,0,.52); animation: login-rise-in .25s ease both; }
 .login-close { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; color: var(--soft); cursor: pointer; transition: background .2s, color .2s, transform .2s; }.login-close:hover, .login-close:focus-visible { background: rgba(255,255,255,.1); color: var(--paper); transform: rotate(90deg); }.login-close svg { width: 18px; }
