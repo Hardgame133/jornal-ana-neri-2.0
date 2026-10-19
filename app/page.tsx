@@ -18,13 +18,6 @@ const posts = [
     description: 'Conceitos fortes, execução precisa e imagens que continuam na cabeça depois do play.',
     accent: 'amber',
   },
-  {
-    number: '03',
-    category: 'Motion design',
-    title: 'O detalhe faz a diferença',
-    description: 'Experimentos com tipografia, textura e movimento para contar histórias de um jeito único.',
-    accent: 'blue',
-  },
 ]
 
 export default function Page() {
