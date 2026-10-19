@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, Menu, Play, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, LockKeyhole, Menu, Play, X } from 'lucide-react'
 
 const posts = [
   {
@@ -98,13 +98,12 @@ export default function Page() {
       {loginOpen && (
         <div className="login-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setLoginOpen(false) }}>
           <section className="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
-            <button className="login-close" type="button" aria-label="Fechar login" onClick={() => setLoginOpen(false)}><X aria-hidden="true" /></button>
-            <p className="login-eyebrow">Acesso ao perfil</p>
-            <h2 id="login-title">Login</h2>
-            <div className="login-options">
-              <button className="login-option" type="button"><img className="social-icon google-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wHpbBwxRvVqTYicxhzEumzr8pNKHuW.png" alt="" /><span>Entrar com o Google</span></button>
-              <button className="login-option" type="button"><img className="social-icon instagram-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-dem6mhkCoXGRDytUFt0vZeyYLcCIgT.png" alt="" /><span>Entrar com o Instagram</span></button>
-            </div>
+            <button className="login-close" type="button" aria-label="Fechar código de acesso" onClick={() => setLoginOpen(false)}><X aria-hidden="true" /></button>
+            <img className="access-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" alt="" />
+            <h2 id="login-title">Código de Acesso</h2>
+            <p className="access-description">Digite o código para continuar</p>
+            <label className="access-input"><LockKeyhole aria-hidden="true" /><input type="text" placeholder="Digite o código..." aria-label="Código de acesso" /></label>
+            <button className="access-submit" type="button">Entrar <ArrowRight aria-hidden="true" /></button>
           </section>
         </div>
       )}
