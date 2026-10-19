@@ -98,7 +98,6 @@ export default function Page() {
       {loginOpen && (
         <div className="login-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setLoginOpen(false) }}>
           <section className="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
-            <button className="login-close" type="button" aria-label="Fechar código de acesso" onClick={() => setLoginOpen(false)}><X aria-hidden="true" /></button>
             <img className="access-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" alt="" />
             <h2 id="login-title">Código de Acesso</h2>
             <p className="access-description">Digite o código para continuar</p>
