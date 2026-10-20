@@ -1,24 +1,31 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Play } from 'lucide-react'
 
-const projects = [
-  ['Cinematografia', 'Luz, ritmo e movimento', 'Uma coleção de estudos visuais criados para transformar cada frame em uma experiência memorável.'],
-  ['Direção criativa', 'Ideias que ganham vida', 'Conceitos fortes, execução precisa e imagens que continuam na cabeça depois do play.'],
-  ['Motion design', 'O detalhe faz a diferença', 'Experimentos com tipografia, textura e movimento para contar histórias de um jeito único.'],
-  ['Fotografia', 'Olhares que permanecem', 'Composições autorais para registrar atmosferas, pessoas e lugares com sensibilidade.'],
-  ['Documentário', 'Histórias reais', 'Narrativas próximas e honestas sobre pessoas, trajetórias e experiências marcantes.'],
-  ['Identidade visual', 'Marcas com presença', 'Direção de arte e linguagem visual para projetos que querem ser lembrados.'],
-  ['Som e trilha', 'Ouvindo cada cena', 'Paisagens sonoras que ampliam a emoção e dão profundidade a cada história.'],
-  ['Editorial', 'Palavras em movimento', 'Conteúdo e design editorial pensados para informar, envolver e criar conexão.'],
-  ['Cultura', 'Ideias em comunidade', 'Projetos que aproximam pessoas, conhecimento e novas formas de expressão.'],
-  ['Arquitetura', 'Espaços que contam', 'Imagens e narrativas sobre lugares que guardam memórias e despertam sentidos.'],
-  ['Educação', 'Aprender é descobrir', 'Experiências visuais para tornar o conhecimento mais próximo, humano e inspirador.'],
-  ['Comunidade', 'Feito em conjunto', 'Histórias construídas com escuta, colaboração e participação de todos.'],
-]
+type Card = { id: number; title: string; description: string; media: 'video' | 'image'; image?: string }
 
 export default function ProjetosPage() {
+  const [cards, setCards] = useState<Card[]>([])
+
+  useEffect(() => {
+    const saved = localStorage.getItem('admin-cards')
+    if (saved) {
+      setCards(JSON.parse(saved))
+    } else {
+      const initial: Card[] = [
+        { id: 1, title: 'Luz, ritmo e movimento', description: 'Uma coleção de estudos visuais.', media: 'video' },
+        { id: 2, title: 'Ideias que ganham vida', description: 'Conceitos fortes e imagens marcantes.', media: 'video' },
+        { id: 3, title: 'Olhares que permanecem', description: 'Composições autorais e sensíveis.', media: 'video' },
+      ]
+      setCards(initial)
+      localStorage.setItem('admin-cards', JSON.stringify(initial))
+    }
+  }, [])
+
+  const projectCards = cards.slice(2)
+
   return (
     <main className="site-shell inner-page">
       <header className="topbar inner-topbar">
@@ -28,7 +35,7 @@ export default function ProjetosPage() {
         </nav>
       </header>
       <section className="inner-project-list" aria-label="Projetos da escola">
-        {projects.map(([category, title]) => <article className="project-video-card" key={title}><div className="video-frame"><button className="play-button" type="button" aria-label={`Reproduzir ${title}`}><Play fill="currentColor" aria-hidden="true" /></button><span className="video-label">SEU VÍDEO AQUI</span></div></article>)}
+        {projectCards.map((card) => card.media === 'image' ? <article className="project-video-card image-card" key={card.id}><img src={card.image} alt={card.title} className="card-image" /><div className="card-overlay"><h3>{card.title}</h3><p>{card.description}</p></div></article> : <article className="project-video-card" key={card.id}><div className="video-frame"><button className="play-button" type="button" aria-label={`Reproduzir ${card.title}`}><Play fill="currentColor" aria-hidden="true" /></button><span className="video-label">SEU VÍDEO AQUI</span></div></article>)}
       </section>
     </main>
   )
