@@ -9,22 +9,9 @@ type Card = { id: number; title: string; description: string; media: 'video' | '
 export default function ProjetosPage() {
   const [cards, setCards] = useState<Card[]>([])
 
-  useEffect(() => {
-    const saved = localStorage.getItem('admin-cards')
-    if (saved) {
-      setCards(JSON.parse(saved))
-    } else {
-      const initial: Card[] = [
-        { id: 1, title: 'Luz, ritmo e movimento', description: 'Uma coleção de estudos visuais.', media: 'video' },
-        { id: 2, title: 'Ideias que ganham vida', description: 'Conceitos fortes e imagens marcantes.', media: 'video' },
-        { id: 3, title: 'Olhares que permanecem', description: 'Composições autorais e sensíveis.', media: 'video' },
-      ]
-      setCards(initial)
-      localStorage.setItem('admin-cards', JSON.stringify(initial))
-    }
-  }, [])
+  useEffect(() => { fetch('/api/cards').then((response) => response.json()).then(setCards) }, [])
 
-  const projectCards = cards.slice(2)
+  const projectCards = cards.filter((card) => !(card as Card & { isHome?: boolean }).isHome)
 
   return (
     <main className="site-shell inner-page">

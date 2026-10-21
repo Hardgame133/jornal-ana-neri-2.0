@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowLeft, ImagePlus, Pencil, Plus, Trash2, Video, X } from 'lucide-react'
 import Link from 'next/link'
 
@@ -28,12 +28,13 @@ function CardEditor({ card, onSave, onCancel }: { card?: Card; onSave: (card: Ca
 }
 
 export default function AdminPage() {
-  const [cards, setCards] = useState(initialCards)
+  const [cards, setCards] = useState<Card[]>([])
   const [editor, setEditor] = useState<{ card?: Card; section: 'home' | 'projects' } | null>(null)
-  const homeCards = cards.slice(0, 2)
-  const projectCards = cards.slice(2)
-  const saveCard = (card: Card, section: 'home' | 'projects') => { setCards((current) => card.id && current.some((item) => item.id === card.id) ? current.map((item) => item.id === card.id ? card : item) : section === 'home' ? [card, ...current] : [...current, card]); setEditor(null) }
-  const removeCard = (id: number) => setCards((current) => current.filter((card) => card.id !== id))
+  useEffect(() => { fetch('/api/cards').then((response) => response.json()).then(setCards) }, [])
+  const homeCards = cards.filter((card) => (card as Card & { isHome?: boolean }).isHome).slice(0, 2)
+  const projectCards = cards.filter((card) => !(card as Card & { isHome?: boolean }).isHome)
+  const saveCard = async (card: Card, section: 'home' | 'projects') => { const payload = { ...card, section }; const response = await fetch(card.id && cards.some((item) => item.id === card.id) ? '/api/cards' : '/api/cards', { method: card.id && cards.some((item) => item.id === card.id) ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); const saved = await response.json(); setCards((current) => card.id && current.some((item) => item.id === card.id) ? current.map((item) => item.id === card.id ? saved : item) : [...current, saved]); setEditor(null) }
+  const removeCard = async (id: number) => { await fetch(`/api/cards?id=${id}`, { method: 'DELETE' }); setCards((current) => current.filter((card) => card.id !== id)) }
   const list = (items: Card[], section: 'home' | 'projects') => <div className="admin-card-list">{items.map((card) => <article className="admin-card-item" key={card.id}><div><strong>{card.title}</strong><span>{card.media === 'image' ? 'Imagem' : 'Vídeo'} · {card.description}</span></div><div className="admin-card-actions"><button type="button" aria-label={`Editar ${card.title}`} onClick={() => setEditor({ card, section })}><Pencil aria-hidden="true" /></button><button type="button" aria-label={`Excluir ${card.title}`} onClick={() => removeCard(card.id)}><Trash2 aria-hidden="true" /></button></div></article>)}</div>
   return <main className="site-shell inner-page admin-page"><header className="topbar inner-topbar"><Link className="back-link" href="/" aria-label="Voltar para o início"><ArrowLeft aria-hidden="true" /> Início</Link><span className="admin-label">Painel administrativo</span></header><section className="admin-content" aria-labelledby="admin-title"><p className="section-kicker">Área restrita</p><h1 id="admin-title">Gerenciar conteúdo</h1><p className="admin-intro">Crie, edite ou remova cards. Cards com imagem exibem a imagem e a descrição, sem o botão de assistir vídeo.</p><div className="admin-section-heading"><div><span className="section-kicker">Tela inicial</span><h2>Cards principais</h2></div><button className="admin-add-button" type="button" onClick={() => setEditor({ section: 'home' })}><Plus aria-hidden="true" /> Novo card</button></div>{list(homeCards, 'home')}<div className="admin-section-heading"><div><span className="section-kicker">Projetos</span><h2>Outros projetos</h2></div><button className="admin-add-button" type="button" onClick={() => setEditor({ section: 'projects' })}><Plus aria-hidden="true" /> Novo card</button></div>{list(projectCards, 'projects')}{editor && <CardEditor card={editor.card} onCancel={() => setEditor(null)} onSave={(card) => saveCard(card, editor.section)} />}</section></main>
 }

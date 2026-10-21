@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, ArrowUpRight, Eye, EyeOff, LockKeyhole, Menu, Play, X } from 'lucide-react'
 
+type ManagedCard = { id: number; title: string; description: string; media: 'video' | 'image'; image?: string; isHome?: boolean }
+
 const posts = [
   {
     number: '01',
@@ -27,6 +29,9 @@ export default function Page() {
   const [codeVisible, setCodeVisible] = useState(false)
   const [codeError, setCodeError] = useState(false)
   const [active, setActive] = useState('Início')
+  const [managedCards, setManagedCards] = useState<ManagedCard[]>([])
+
+  useEffect(() => { fetch('/api/cards').then((response) => response.json()).then((data) => setManagedCards(data.filter((card: ManagedCard) => card.isHome))) }, [])
 
   useEffect(() => {
     const updateFadingElements = () => {
@@ -116,17 +121,13 @@ export default function Page() {
 
       <section className="projects" id="projetos">
         <div className="post-list">
-          {posts.map((post) => (
-            <article className={`post-card fade-on-scroll ${post.accent}`} key={post.number}>
-              <div className="video-frame" role="img" aria-label={`Área reservada para o vídeo ${post.number}`}>
-                <div className="video-glow" />
-                <div className="video-lines" />
-                <button className="play-button" type="button" aria-label={`Reproduzir vídeo ${post.number}`}><Play fill="currentColor" aria-hidden="true" /></button>
-                <span className="video-label">SEU VÍDEO AQUI</span>
-              </div>
+          {(managedCards.length ? managedCards : posts).map((post, index) => {
+            const isImage = 'media' in post && post.media === 'image'
+            return <article className={`post-card fade-on-scroll ${'accent' in post ? post.accent : index % 2 ? 'amber' : 'violet'}`} key={'id' in post ? post.id : post.number}>
+              {isImage ? <img className="card-image" src={post.image} alt={post.title} /> : <div className="video-frame" role="img" aria-label={`Área reservada para o vídeo ${index + 1}`}><div className="video-glow" /><div className="video-lines" /><button className="play-button" type="button" aria-label={`Reproduzir vídeo ${index + 1}`}><Play fill="currentColor" aria-hidden="true" /></button><span className="video-label">SEU VÍDEO AQUI</span></div>}
               <div className="post-copy"><h3>{post.title}</h3><p>{post.description}</p></div>
             </article>
-          ))}
+          })}
         </div>
         <section className="school-info" aria-labelledby="school-info-title">
           <p className="section-kicker">Escola Ana Neri</p>
