@@ -1,16 +1,30 @@
 import { NextResponse } from 'next/server'
-import { sql } from 'drizzle-orm'
-import { db } from '@/lib/db'
+import { Collection } from 'mongodb'
+import { getDb } from '@/lib/db'
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 
-const cardSelect = sql`id, title, description, media_type AS "media", media_url AS "image", video_url AS "videoUrl", is_home AS "isHome", position`
+const CARDS_COLLECTION = 'cards'
+
+type CardDoc = {
+  _id: number
+  title: string
+  description: string
+  media: 'image' | 'video'
+  image: string | null
+  videoUrl: string | null
+  isHome: boolean
+  position: number
+  updatedAt?: Date
+}
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'cards.json')
 
-const DEFAULT_CARDS = [
+// Sets padronizados usados na primeira execução (banco ou JSON) para o site
+// nunca aparecer vazio antes do primeiro acesso ao painel /admin.
+const DEFAULT_CARDS: CardDoc[] = [
   {
-    id: 1,
+    _id: 1,
     title: 'Luz, ritmo e movimento',
     description: 'Uma coleção de estudos visuais criados para transformar cada frame em uma experiência memorável.',
     media: 'video',
@@ -20,7 +34,7 @@ const DEFAULT_CARDS = [
     position: 1
   },
   {
-    id: 2,
+    _id: 2,
     title: 'Ideias que ganham vida',
     description: 'Conceitos fortes, execução precisa e imagens que continuam na cabeça depois do play.',
     media: 'video',
@@ -30,7 +44,7 @@ const DEFAULT_CARDS = [
     position: 2
   },
   {
-    id: 3,
+    _id: 3,
     title: 'Clube de Robótica & Automação',
     description: 'Alunos do Ana Neri desenvolvem circuitos eletrônicos e projetos inovadores no laboratório.',
     media: 'image',
@@ -40,7 +54,7 @@ const DEFAULT_CARDS = [
     position: 1
   },
   {
-    id: 4,
+    _id: 4,
     title: 'Horta Comunitária & Meio Ambiente',
     description: 'Aprender na prática o respeito à natureza e a sustentabilidade no pátio da escola.',
     media: 'image',
@@ -51,14 +65,34 @@ const DEFAULT_CARDS = [
   }
 ]
 
+const jsonStore = {
+  available() {
+    return Boolean(process.env.MONGODB_URI)
+  },
+  async getCollection(): Promise<Collection<CardDoc>> {
+    const database = await getDb()
+    return database.collection<CardDoc>(CARDS_COLLECTION)
+  },
+  toCard(doc: CardDoc) {
+    const { _id, updatedAt, ...rest } = doc
+    return { id: _id as number, ...rest }
+  },
+  async seedIfEmpty(collection: Collection<CardDoc>) {
+    const count = await collection.countDocuments()
+    if (count === 0) {
+      await collection.insertMany([...DEFAULT_CARDS])
+    }
+  }
+}
+
 async function getLocalCards() {
   try {
     const raw = await readFile(DATA_FILE, 'utf-8')
     return JSON.parse(raw)
   } catch {
     await mkdir(path.dirname(DATA_FILE), { recursive: true })
-    await writeFile(DATA_FILE, JSON.stringify(DEFAULT_CARDS, null, 2))
-    return DEFAULT_CARDS
+    await writeFile(DATA_FILE, JSON.stringify(DEFAULT_CARDS.map(({ _id, ...rest }) => ({ id: _id, ...rest })), null, 2))
+    return DEFAULT_CARDS.map(({ _id, ...rest }) => ({ id: _id, ...rest }))
   }
 }
 
@@ -68,13 +102,18 @@ async function saveLocalCards(cards: any[]) {
 }
 
 export async function GET() {
-  try {
-    if (process.env.DATABASE_URL) {
-      const result = await db.execute(sql`SELECT ${cardSelect} FROM project_cards ORDER BY is_home DESC, position ASC, id ASC`)
-      return NextResponse.json(result.rows)
+  if (jsonStore.available()) {
+    try {
+      const collection = await jsonStore.getCollection()
+      await jsonStore.seedIfEmpty(collection)
+      const docs = await collection
+        .find({}, { sort: { isHome: -1, position: 1, _id: 1 } })
+        .map(jsonStore.toCard)
+        .toArray()
+      return NextResponse.json(docs)
+    } catch (dbError) {
+      console.warn('MongoDB Atlas indisponível, usando armazenamento local JSON:', (dbError as Error).message)
     }
-  } catch (dbError) {
-    console.warn('Banco de dados indisponível, usando armazenamento local JSON:', (dbError as Error).message)
   }
 
   const localCards = await getLocalCards()
@@ -85,13 +124,25 @@ export async function POST(request: Request) {
   const card = await request.json()
   const isHome = card.section === 'home'
 
-  try {
-    if (process.env.DATABASE_URL) {
-      const result = await db.execute(sql`INSERT INTO project_cards (title, description, media_type, media_url, video_url, is_home, position) VALUES (${String(card.title ?? '').trim()}, ${String(card.description ?? '').trim()}, ${card.media ?? (card.image ? 'image' : 'video')}, ${card.image ?? null}, ${card.videoUrl ?? null}, ${isHome}, ${Number(card.position ?? 0)}) RETURNING ${cardSelect}`)
-      return NextResponse.json(result.rows[0], { status: 201 })
+  if (jsonStore.available()) {
+    try {
+      const collection = await jsonStore.getCollection()
+      const newCard: CardDoc = {
+        _id: Date.now(),
+        title: String(card.title ?? '').trim(),
+        description: String(card.description ?? '').trim(),
+        media: (card.media ?? (card.image ? 'image' : 'video')) as CardDoc['media'],
+        image: card.image ?? null,
+        videoUrl: card.videoUrl ?? null,
+        isHome,
+        position: Number(card.position ?? 0),
+        updatedAt: new Date()
+      }
+      await collection.insertOne(newCard)
+      return NextResponse.json(jsonStore.toCard(newCard), { status: 201 })
+    } catch (dbError) {
+      console.warn('MongoDB Atlas indisponível para inserção, gravando no JSON local.')
     }
-  } catch (dbError) {
-    console.warn('Banco indisponível para inserção, gravando no JSON local.')
   }
 
   const cards = await getLocalCards()
@@ -113,13 +164,28 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   const card = await request.json()
 
-  try {
-    if (process.env.DATABASE_URL) {
-      const result = await db.execute(sql`UPDATE project_cards SET title = ${String(card.title ?? '').trim()}, description = ${String(card.description ?? '').trim()}, media_type = ${card.media ?? (card.image ? 'image' : 'video')}, media_url = ${card.image ?? null}, video_url = ${card.videoUrl ?? null}, is_home = COALESCE(${typeof card.isHome === 'boolean' ? card.isHome : null}, is_home), updated_at = NOW() WHERE id = ${Number(card.id)} RETURNING ${cardSelect}`)
-      if (result.rows[0]) return NextResponse.json(result.rows[0])
+  if (jsonStore.available()) {
+    try {
+      const collection = await jsonStore.getCollection()
+      const set: Record<string, unknown> = {
+        title: String(card.title ?? '').trim(),
+        description: String(card.description ?? '').trim(),
+        media: card.media ?? (card.image ? 'image' : 'video'),
+        image: card.image ?? null,
+        videoUrl: card.videoUrl ?? null,
+        updatedAt: new Date()
+      }
+      if (typeof card.isHome === 'boolean') set.isHome = card.isHome
+
+      const result = await collection.findOneAndUpdate(
+        { _id: Number(card.id) },
+        { $set: set },
+        { returnDocument: 'after' }
+      )
+      if (result) return NextResponse.json(jsonStore.toCard(result))
+    } catch (dbError) {
+      console.warn('MongoDB Atlas indisponível para atualização, atualizando no JSON local.')
     }
-  } catch (dbError) {
-    console.warn('Banco indisponível para atualização, atualizando no JSON local.')
   }
 
   const cards = await getLocalCards()
@@ -143,13 +209,14 @@ export async function DELETE(request: Request) {
   const id = Number(new URL(request.url).searchParams.get('id'))
   if (!Number.isInteger(id)) return NextResponse.json({ error: 'ID inválido.' }, { status: 400 })
 
-  try {
-    if (process.env.DATABASE_URL) {
-      await db.execute(sql`DELETE FROM project_cards WHERE id = ${id}`)
+  if (jsonStore.available()) {
+    try {
+      const collection = await jsonStore.getCollection()
+      await collection.deleteOne({ _id: id })
       return new NextResponse(null, { status: 204 })
+    } catch (dbError) {
+      console.warn('MongoDB Atlas indisponível para exclusão, removendo do JSON local.')
     }
-  } catch (dbError) {
-    console.warn('Banco indisponível para exclusão, removendo do JSON local.')
   }
 
   let cards = await getLocalCards()

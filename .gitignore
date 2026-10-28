@@ -10,6 +10,9 @@ __v0_jsx-dev-runtime.ts
 # Environment variables
 .env
 .env*.local
+*.env
+!*.env.example
+atlas-credentials*
 
 # Common ignores
 node_modules
@@ -17,3 +20,4 @@ node_modules
 .DS_Store
 next-env.d.ts
 public/uploads/
+tsconfig.tsbuildinfo
