@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar conteúdo — Painel Administrativo Escola Ana Neri</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" type="image/png">
+</head>
+<body>
+  <main class="site-shell inner-page admin-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar inner-topbar">
+      <a class="back-link" href="index.html" aria-label="Voltar para o início">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Início
+      </a>
+      <span class="admin-label">Painel administrativo</span>
+    </header>
+
+    <section class="admin-content" aria-labelledby="admin-title">
+      <p class="section-kicker">Área restrita</p>
+      <h1 id="admin-title">Gerenciar conteúdo</h1>
+      <p class="admin-intro">Organize separadamente os dois cards da página inicial e todos os projetos da escola.</p>
+
+      <p class="admin-success" id="adminSuccessMsg" role="status" style="display:none;"></p>
+
+      <!-- Painel 1: Página Inicial -->
+      <section class="admin-panel-section">
+        <div class="admin-section-heading">
+          <div>
+            <span class="section-kicker">Página Inicial</span>
+            <h2>Editar os dois cards principais</h2>
+          </div>
+          <button class="admin-add-button" type="button" id="addHomeCardBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Adicionar card
+          </button>
+        </div>
+        <div class="admin-card-list" id="homeListContainer">
+          <!-- Renderizado via JS -->
+        </div>
+      </section>
+
+      <!-- Painel 2: Projetos -->
+      <section class="admin-panel-section">
+        <div class="admin-section-heading">
+          <div>
+            <span class="section-kicker">Projetos</span>
+            <h2>Gerenciar Projetos</h2>
+          </div>
+          <button class="admin-add-button" type="button" id="addProjectCardBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Novo projeto
+          </button>
+        </div>
+        <div class="admin-card-list" id="projectListContainer">
+          <!-- Renderizado via JS -->
+        </div>
+      </section>
+
+      <!-- Editor Modal -->
+      <form class="admin-editor" id="cardEditorForm" style="display:none;">
+        <div class="admin-editor-heading">
+          <div>
+            <span class="section-kicker" id="editorSectionKicker">Editar Página Inicial</span>
+            <h2 id="editorHeading">Editar card</h2>
+          </div>
+          <button class="admin-icon-button" type="button" id="closeEditorBtn" aria-label="Fechar editor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <input type="hidden" id="editCardId">
+        <input type="hidden" id="editCardSection">
+
+        <label>
+          Nome do card
+          <input id="editCardTitle" required placeholder="Ex.: Feira de Ciências">
+        </label>
+
+        <label>
+          Descrição
+          <textarea id="editCardDesc" placeholder="Descreva o projeto..." rows="4"></textarea>
+        </label>
+
+        <fieldset class="admin-media-fieldset">
+          <legend>Arquivo do card</legend>
+          <div class="admin-media-choice">
+            <label><input type="radio" name="media-type" id="mediaTypeImage" value="image" checked> Imagem</label>
+            <label><input type="radio" name="media-type" id="mediaTypeVideo" value="video"> Vídeo</label>
+          </div>
+          <label style="margin-top:0;">
+            <span>URL da imagem</span>
+            <input type="url" id="editCardImageUrl" placeholder="https://images.unsplash.com/... ou link de imagem">
+          </label>
+          <p class="admin-help">Cole o link da imagem desejada para a capa do card.</p>
+        </fieldset>
+
+        <div id="imagePreviewContainer" class="admin-image-preview" style="display:none;">
+          <img id="imagePreviewImg" src="" alt="Pré-visualização da capa">
+          <button type="button" id="removeImageBtn">Remover imagem</button>
+        </div>
+
+        <label>
+          <span style="display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            URL alternativa do vídeo
+          </span>
+          <input id="editCardVideoUrl" placeholder="https://... (opcional)">
+        </label>
+        <p class="admin-help">Quando imagem e descrição estiverem preenchidas, a imagem e o texto terão prioridade e o botão de vídeo ficará oculto.</p>
+
+        <div class="admin-editor-actions">
+          <button class="admin-secondary-button" type="button" id="cancelEditorBtn">Cancelar</button>
+          <button class="admin-save-button" type="submit" id="saveCardBtn">Salvar card</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    const homeList = document.getElementById('homeListContainer');
+    const projectList = document.getElementById('projectListContainer');
+    const addHomeCardBtn = document.getElementById('addHomeCardBtn');
+    const addProjectCardBtn = document.getElementById('addProjectCardBtn');
+    const cardEditor = document.getElementById('cardEditorForm');
+    const closeEditorBtn = document.getElementById('closeEditorBtn');
+    const cancelEditorBtn = document.getElementById('cancelEditorBtn');
+    const editorHeading = document.getElementById('editorHeading');
+    const editorSectionKicker = document.getElementById('editorSectionKicker');
+    const adminSuccessMsg = document.getElementById('adminSuccessMsg');
+
+    const editCardId = document.getElementById('editCardId');
+    const editCardSection = document.getElementById('editCardSection');
+    const editCardTitle = document.getElementById('editCardTitle');
+    const editCardDesc = document.getElementById('editCardDesc');
+    const editCardImageUrl = document.getElementById('editCardImageUrl');
+    const editCardVideoUrl = document.getElementById('editCardVideoUrl');
+    const mediaTypeImage = document.getElementById('mediaTypeImage');
+    const mediaTypeVideo = document.getElementById('mediaTypeVideo');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreviewImg = document.getElementById('imagePreviewImg');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+
+    function flashSuccess(text) {
+      adminSuccessMsg.textContent = text;
+      adminSuccessMsg.style.display = 'block';
+      setTimeout(() => {
+        adminSuccessMsg.style.display = 'none';
+      }, 3500);
+    }
+
+    function renderLists() {
+      const homeCards = getHomeCards();
+      const projectCards = getProjectCards();
+
+      // Home list
+      if (homeCards.length === 0) {
+        homeList.innerHTML = '<p class="admin-empty">Nenhum card cadastrado nesta área.</p>';
+      } else {
+        homeList.innerHTML = homeCards.map(c => renderItem(c, 'home')).join('');
+      }
+
+      if (homeCards.length >= 2) {
+        addHomeCardBtn.style.display = 'none';
+      } else {
+        addHomeCardBtn.style.display = 'inline-flex';
+      }
+
+      // Projects list
+      if (projectCards.length === 0) {
+        projectList.innerHTML = '<p class="admin-empty">Nenhum card cadastrado nesta área.</p>';
+      } else {
+        projectList.innerHTML = projectCards.map(c => renderItem(c, 'projects')).join('');
+      }
+    }
+
+    function renderItem(card, section) {
+      let iconOrImg = '';
+      if (card.image) {
+        iconOrImg = `<img src="${card.image}" alt="">`;
+      } else {
+        iconOrImg = `<div class="admin-card-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>`;
+      }
+
+      return `
+        <article class="admin-card-item">
+          <div class="admin-card-summary">
+            ${iconOrImg}
+            <div>
+              <strong>${card.title}</strong>
+              <span>${card.description || 'Sem descrição'} · ${card.image ? 'Imagem' : card.videoUrl ? 'Vídeo' : 'Sem mídia'}</span>
+            </div>
+          </div>
+          <div class="admin-card-actions">
+            <button type="button" aria-label="Editar ${card.title}" onclick="editCard(${card.id}, '${section}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+            <button type="button" aria-label="Excluir ${card.title}" onclick="removeCardPrompt(${card.id}, '${card.title}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    window.editCard = function(id, section) {
+      const cards = getCards();
+      const card = cards.find(c => c.id === id);
+      if (!card) return;
+
+      editCardId.value = card.id;
+      editCardSection.value = section;
+      editCardTitle.value = card.title;
+      editCardDesc.value = card.description || '';
+      editCardImageUrl.value = card.image || '';
+      editCardVideoUrl.value = card.videoUrl || '';
+
+      if (card.image) {
+        mediaTypeImage.checked = true;
+        imagePreviewImg.src = card.image;
+        imagePreviewContainer.style.display = 'block';
+      } else {
+        mediaTypeVideo.checked = true;
+        imagePreviewContainer.style.display = 'none';
+      }
+
+      editorHeading.textContent = 'Editar card';
+      editorSectionKicker.textContent = section === 'home' ? 'Editar Página Inicial' : 'Gerenciar Projetos';
+      cardEditor.style.display = 'block';
+    };
+
+    window.removeCardPrompt = function(id, title) {
+      if (confirm(`Excluir o card “${title}”? Esta ação não pode ser desfeita.`)) {
+        deleteCard(id);
+        renderLists();
+        flashSuccess('Card excluído.');
+      }
+    };
+
+    addHomeCardBtn.addEventListener('click', () => {
+      openNewCard('home');
+    });
+
+    addProjectCardBtn.addEventListener('click', () => {
+      openNewCard('projects');
+    });
+
+    function openNewCard(section) {
+      editCardId.value = '';
+      editCardSection.value = section;
+      editCardTitle.value = '';
+      editCardDesc.value = '';
+      editCardImageUrl.value = 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=1200&q=80';
+      editCardVideoUrl.value = '';
+      mediaTypeImage.checked = true;
+      imagePreviewImg.src = editCardImageUrl.value;
+      imagePreviewContainer.style.display = 'block';
+
+      editorHeading.textContent = 'Novo card';
+      editorSectionKicker.textContent = section === 'home' ? 'Editar Página Inicial' : 'Gerenciar Projetos';
+      cardEditor.style.display = 'block';
+    }
+
+    closeEditorBtn.addEventListener('click', () => cardEditor.style.display = 'none');
+    cancelEditorBtn.addEventListener('click', () => cardEditor.style.display = 'none');
+
+    editCardImageUrl.addEventListener('input', () => {
+      if (editCardImageUrl.value.trim()) {
+        imagePreviewImg.src = editCardImageUrl.value.trim();
+        imagePreviewContainer.style.display = 'block';
+      } else {
+        imagePreviewContainer.style.display = 'none';
+      }
+    });
+
+    removeImageBtn.addEventListener('click', () => {
+      editCardImageUrl.value = '';
+      imagePreviewContainer.style.display = 'none';
+    });
+
+    cardEditor.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = editCardId.value;
+      const section = editCardSection.value;
+      const title = editCardTitle.value.trim();
+      const description = editCardDesc.value.trim();
+      const image = editCardImageUrl.value.trim() || null;
+      const videoUrl = editCardVideoUrl.value.trim() || null;
+
+      if (id) {
+        updateCard({ id, title, description, image, videoUrl, isHome: section === 'home' });
+      } else {
+        addCard({ title, description, image, videoUrl, isHome: section === 'home' });
+      }
+
+      cardEditor.style.display = 'none';
+      renderLists();
+      flashSuccess('Alterações salvas com sucesso.');
+    });
+
+    renderLists();
+  </script>
+</body>
+</html>

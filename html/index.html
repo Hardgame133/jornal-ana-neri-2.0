@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVA — Histórias em movimento | Jornal Ana Neri</title>
+  <meta name="description" content="Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" type="image/png">
+</head>
+<body>
+  <main class="site-shell">
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- Topbar fixa com barra flutuante centralizada e botão de acesso -->
+    <header class="topbar">
+      <nav class="nav-pill" id="navPill" aria-label="Navegação principal">
+        <a href="#inicio" class="active" id="navInicio">Início</a>
+        <a href="projetos.html">Projetos</a>
+        <a href="sobre.html">Sobre</a>
+        <a class="nav-contact" href="#contato">
+          Fale conosco
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      </nav>
+
+      <div class="profile-area">
+        <button class="profile-button" type="button" id="openLoginBtn" aria-label="Abrir configurações da conta" aria-haspopup="dialog">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" alt="Nuvem com engrenagem">
+        </button>
+      </div>
+
+      <button class="menu-button" type="button" id="menuToggle" aria-label="Abrir menu de navegação">
+        <svg id="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Modal de Código de Acesso (1554) -->
+    <div class="login-overlay" id="loginModal" role="presentation">
+      <section class="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <button class="login-close" type="button" id="closeLoginBtn" aria-label="Fechar janela">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <img class="access-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" alt="">
+        <h2 id="login-title">Código de Acesso</h2>
+        <p class="access-description">Digite o código para continuar</p>
+        <label class="access-input" id="accessInputLabel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="16" r="1"></circle>
+            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <input type="password" id="accessCodeInput" inputmode="numeric" maxlength="4" placeholder="Digite o código..." aria-label="Código de acesso">
+          <button class="code-visibility" type="button" id="toggleCodeVisibility" aria-label="Mostrar ou ocultar código">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </label>
+        <p class="access-error" id="loginError" role="alert">Código incorreto. Tente novamente.</p>
+        <button class="access-submit" type="button" id="submitLoginBtn">
+          Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </section>
+    </div>
+
+    <!-- Hero Section com título em itálico idêntico ao original -->
+    <section class="hero" id="inicio">
+      <h1 class="fade-on-scroll" style="font-style: italic;">
+        Conheça a Escola Ana Neri: informações, história e tudo o que você precisa saber sobre nossa instituição.
+      </h1>
+      <div class="hero-tabs" aria-label="Navegação rápida">
+        <a class="hero-tab hero-tab-light" href="projetos.html">Projetos</a>
+        <a class="hero-tab hero-tab-dark" href="sobre.html">Sobre</a>
+      </div>
+      <a class="scroll-cue" href="#projetos" aria-label="Ir para projetos"></a>
+      <div class="hero-orb hero-orb-two" aria-hidden="true"></div>
+    </section>
+
+    <!-- Seção de Projetos e Cards com vídeo / fotos -->
+    <section class="projects" id="projetos">
+      <div class="post-list" id="postsContainer">
+        <!-- Card 1 -->
+        <article class="post-card fade-on-scroll violet">
+          <div class="video-frame" role="img" aria-label="Área reservada para o vídeo 1">
+            <div class="video-glow"></div>
+            <div class="video-lines"></div>
+            <button class="play-button" type="button" aria-label="Reproduzir vídeo 1">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <span class="video-label">SEU VÍDEO AQUI</span>
+          </div>
+          <div class="post-copy">
+            <h3>Luz, ritmo e movimento</h3>
+            <p>Uma coleção de estudos visuais criados para transformar cada frame em uma experiência memorável.</p>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="post-card fade-on-scroll amber">
+          <div class="video-frame" role="img" aria-label="Área reservada para o vídeo 2">
+            <div class="video-glow"></div>
+            <div class="video-lines"></div>
+            <button class="play-button" type="button" aria-label="Reproduzir vídeo 2">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <span class="video-label">SEU VÍDEO AQUI</span>
+          </div>
+          <div class="post-copy">
+            <h3>Ideias que ganham vida</h3>
+            <p>Conceitos fortes, execução precisa e imagens que continuam na cabeça depois do play.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Texto Institucional da Escola Ana Neri -->
+      <section class="school-info" aria-labelledby="school-info-title">
+        <p class="section-kicker">Escola Ana Neri</p>
+        <h2 id="school-info-title">Educação, conhecimento e amizade em Porto Alegre!</h2>
+        <div class="school-info-copy">
+          <p>A Escola Ana Neri, localizada em Porto Alegre (RS), perto do Triângulo, é um espaço de aprendizado, convivência e novas descobertas. No dia a dia, alunos e professores compartilham conhecimentos, desenvolvem habilidades e constroem amizades.</p>
+          <p>A escola tem um papel muito importante na formação dos estudantes, incentivando o respeito, a responsabilidade, a criatividade e a união. Além das aulas, o ambiente escolar proporciona experiências que contribuem para o crescimento pessoal e para a preparação dos alunos para o futuro.</p>
+          <p>A Escola Ana Neri é mais do que um lugar para estudar: é um espaço para aprender, fazer amigos e construir sonhos!</p>
+          <p class="school-info-signature">Jornal Escolar Ana Neri — informação, educação e comunidade</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- Seção de Contato -->
+    <section class="contact" id="contato">
+      <span class="section-kicker">Contato</span>
+      <h2>Vamos conversar?</h2>
+      <a class="contact-link" href="mailto:contato@escolananeri.com.br">
+        Fale com a nossa equipe
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="7" y1="17" x2="17" y2="7"></line>
+          <polyline points="7 7 17 7 17 17"></polyline>
+        </svg>
+      </a>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <div class="footer-mark">AN</div>
+          <h2>Escola Ana Neri</h2>
+          <p>Espaço de aprendizado, convivência e novas descobertas em Porto Alegre, perto do Triângulo.</p>
+          <span class="footer-origin">Porto Alegre, Rio Grande do Sul</span>
+        </div>
+        <div class="footer-links">
+          <h3>Navegação</h3>
+          <a href="#inicio">Início</a>
+          <a href="projetos.html">Projetos</a>
+          <a href="sobre.html">Sobre</a>
+          <a href="admin.html">Painel Administrativo</a>
+        </div>
+        <div class="footer-contact">
+          <h3>Localização</h3>
+          <p>Porto Alegre, RS — Brasil</p>
+          <p>Jornal Escolar Ana Neri</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Escola Ana Neri. Todos os direitos reservados.</span>
+        <span>Histórias em movimento</span>
+      </div>
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    // Fade on scroll idêntico ao código do V0 preview
+    const updateFadingElements = () => {
+      const headerBottom = document.querySelector('.topbar')?.getBoundingClientRect().bottom ?? 90;
+      document.querySelectorAll('.fade-on-scroll').forEach((element) => {
+        element.classList.toggle('is-past-navbar', element.getBoundingClientRect().bottom <= headerBottom + 8);
+      });
+    };
+
+    let frame = 0;
+    const scheduleFadeUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateFadingElements();
+      });
+    };
+
+    updateFadingElements();
+    window.addEventListener('scroll', scheduleFadeUpdate, { passive: true });
+    window.addEventListener('resize', scheduleFadeUpdate);
+
+    // Toggle menu mobile
+    const menuToggle = document.getElementById('menuToggle');
+    const navPill = document.getElementById('navPill');
+    if (menuToggle && navPill) {
+      menuToggle.addEventListener('click', () => {
+        navPill.classList.toggle('is-open');
+      });
+    }
+
+    // Modal de Código de Acesso (Código 1554)
+    const openLoginBtn = document.getElementById('openLoginBtn');
+    const closeLoginBtn = document.getElementById('closeLoginBtn');
+    const loginModal = document.getElementById('loginModal');
+    const accessCodeInput = document.getElementById('accessCodeInput');
+    const accessInputLabel = document.getElementById('accessInputLabel');
+    const submitLoginBtn = document.getElementById('submitLoginBtn');
+    const loginError = document.getElementById('loginError');
+    const toggleCodeVisibility = document.getElementById('toggleCodeVisibility');
+    let codeVisible = false;
+
+    if (openLoginBtn && loginModal) {
+      openLoginBtn.addEventListener('click', () => {
+        loginModal.classList.add('is-open');
+        accessCodeInput.value = '';
+        loginError.style.display = 'none';
+        accessInputLabel.classList.remove('has-error');
+        accessCodeInput.focus();
+      });
+
+      closeLoginBtn.addEventListener('click', () => {
+        loginModal.classList.remove('is-open');
+      });
+
+      loginModal.addEventListener('mousedown', (e) => {
+        if (e.target === loginModal) {
+          loginModal.classList.remove('is-open');
+        }
+      });
+    }
+
+    if (toggleCodeVisibility) {
+      toggleCodeVisibility.addEventListener('click', () => {
+        codeVisible = !codeVisible;
+        accessCodeInput.type = codeVisible ? 'text' : 'password';
+      });
+    }
+
+    if (accessCodeInput) {
+      accessCodeInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '');
+        accessInputLabel.classList.remove('has-error');
+        loginError.style.display = 'none';
+      });
+
+      accessCodeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          handleLogin();
+        }
+      });
+    }
+
+    if (submitLoginBtn) {
+      submitLoginBtn.addEventListener('click', handleLogin);
+    }
+
+    function handleLogin() {
+      const code = accessCodeInput.value.trim();
+      // O código original configurado no V0 preview é 1554 (ou senha em branco / admin)
+      if (code === '1554' || code === 'admin' || code === '') {
+        window.location.href = 'admin.html';
+      } else {
+        accessInputLabel.classList.add('has-error');
+        loginError.style.display = 'block';
+      }
+    }
+
+    // Renderizar cards gerenciados da Home se existirem
+    function loadHomeCards() {
+      const homeCards = getHomeCards();
+      if (!homeCards || homeCards.length === 0) return;
+
+      const container = document.getElementById('postsContainer');
+      if (!container) return;
+
+      container.innerHTML = homeCards.map((card, index) => {
+        const accent = index % 2 === 0 ? 'violet' : 'amber';
+        const showImage = Boolean(card.image && card.description.trim());
+
+        let mediaHtml = '';
+        if (showImage) {
+          mediaHtml = `<img class="card-image" src="${card.image}" alt="${card.title}">`;
+        } else {
+          mediaHtml = `
+            <div class="video-frame" role="img" aria-label="Área reservada para o vídeo ${index + 1}">
+              <div class="video-glow"></div>
+              <div class="video-lines"></div>
+              ${card.videoUrl ? `<a class="play-button" href="${card.videoUrl}" target="_blank" rel="noreferrer" aria-label="Reproduzir vídeo"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></a>` : `<button class="play-button" type="button" aria-label="Reproduzir vídeo"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>`}
+              <span class="video-label">${card.videoUrl ? 'ASSISTIR AO VÍDEO' : 'SEU VÍDEO AQUI'}</span>
+            </div>
+          `;
+        }
+
+        return `
+          <article class="post-card fade-on-scroll ${accent}">
+            ${mediaHtml}
+            <div class="post-copy">
+              <h3>${card.title}</h3>
+              <p>${card.description}</p>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      updateFadingElements();
+    }
+
+    loadHomeCards();
+  </script>
+</body>
+</html>

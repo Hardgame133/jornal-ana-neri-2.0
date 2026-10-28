@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Luz, ritmo e movimento",
+    "description": "Uma coleção de estudos visuais criados para transformar cada frame em uma experiência memorável.",
+    "media": "video",
+    "image": null,
+    "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "isHome": true,
+    "position": 1
+  },
+  {
+    "id": 2,
+    "title": "Ideias que ganham vida",
+    "description": "Conceitos fortes, execução precisa e imagens que continuam na cabeça depois do play.",
+    "media": "video",
+    "image": null,
+    "videoUrl": "/uploads/1792801034468-vidssave.com--playlist-1--music-is-my-drug-sailorsongselfawarewildflowerend-ofbeginningbacktofriendsnoonenoticed-240p.mp4",
+    "isHome": true,
+    "position": 2
+  },
+  {
+    "id": 3,
+    "title": "Clube de Robótica & Automação",
+    "description": "Alunos do Ana Neri desenvolvem circuitos eletrônicos e projetos inovadores no laboratório.",
+    "media": "video",
+    "image": null,
+    "videoUrl": "/uploads/1792801047552-vidssave.com--playlist-1--music-is-my-drug-sailorsongselfawarewildflowerend-ofbeginningbacktofriendsnoonenoticed-240p.mp4",
+    "isHome": false,
+    "position": 1
+  },
+  {
+    "id": 4,
+    "title": "Horta Comunitária & Meio Ambiente",
+    "description": "Aprender na prática o respeito à natureza e a sustentabilidade no pátio da escola.",
+    "media": "image",
+    "image": null,
+    "videoUrl": null,
+    "isHome": false,
+    "position": 2
+  }
+]

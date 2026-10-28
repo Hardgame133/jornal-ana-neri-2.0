@@ -1,9 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ArrowRight, ArrowUpRight, Eye, EyeOff, LockKeyhole, Menu, Play, X } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { ArrowRight, ArrowUpRight, Eye, EyeOff, LockKeyhole, Maximize, Menu, Play, X } from 'lucide-react'
 
-type ManagedCard = { id: number; title: string; description: string; media: 'video' | 'image'; image?: string; isHome?: boolean }
+type ManagedCard = { id: number; title: string; description: string; media: 'video' | 'image'; image?: string | null; videoUrl?: string | null; isHome?: boolean }
+
+type ExpandedItem = {
+  type: 'video' | 'image'
+  url: string
+  title: string
+  description: string
+} | null
 
 const posts = [
   {
@@ -30,8 +37,9 @@ export default function Page() {
   const [codeError, setCodeError] = useState(false)
   const [active, setActive] = useState('Início')
   const [managedCards, setManagedCards] = useState<ManagedCard[]>([])
+  const [expanded, setExpanded] = useState<ExpandedItem>(null)
 
-  useEffect(() => { fetch('/api/cards').then((response) => response.json()).then((data) => setManagedCards(data.filter((card: ManagedCard) => card.isHome))) }, [])
+  useEffect(() => { fetch('/api/cards').then((response) => response.json()).then((data) => setManagedCards(data.filter((card: ManagedCard) => card.isHome).slice(0, 2))) }, [])
 
   useEffect(() => {
     const updateFadingElements = () => {
@@ -64,6 +72,26 @@ export default function Page() {
     setActive(label)
     setMenuOpen(false)
   }
+
+  const handleExpand = (item: ExpandedItem) => {
+    setExpanded(item)
+    document.body.style.overflow = 'hidden'
+  }
+
+  const handleCloseExpand = useCallback(() => {
+    setExpanded(null)
+    document.body.style.overflow = ''
+  }, [])
+
+  // Close expanded modal on Escape key
+  useEffect(() => {
+    if (!expanded) return
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleCloseExpand()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [expanded, handleCloseExpand])
 
   return (
     <main className="site-shell">
@@ -122,11 +150,49 @@ export default function Page() {
       <section className="projects" id="projetos">
         <div className="post-list">
           {(managedCards.length ? managedCards : posts).map((post, index) => {
-            const isImage = 'media' in post && post.media === 'image'
-            return <article className={`post-card fade-on-scroll ${'accent' in post ? post.accent : index % 2 ? 'amber' : 'violet'}`} key={'id' in post ? post.id : post.number}>
-              {isImage ? <img className="card-image" src={post.image} alt={post.title} /> : <div className="video-frame" role="img" aria-label={`Área reservada para o vídeo ${index + 1}`}><div className="video-glow" /><div className="video-lines" /><button className="play-button" type="button" aria-label={`Reproduzir vídeo ${index + 1}`}><Play fill="currentColor" aria-hidden="true" /></button><span className="video-label">SEU VÍDEO AQUI</span></div>}
-              <div className="post-copy"><h3>{post.title}</h3><p>{post.description}</p></div>
-            </article>
+            const isManaged = 'id' in post
+            // O tipo de mídia escolhido no painel decide o que o card mostra:
+            // 'image' → imagem clicável; 'video' → player de vídeo. Sem mídia → reservado para vídeo.
+            const media = isManaged ? (post.media ?? (post.image ? 'image' : 'video')) : 'video'
+            const hasImage = isManaged && media === 'image' && Boolean(post.image)
+            const hasVideo = isManaged && media === 'video' && Boolean(post.videoUrl)
+            const videoUrl = hasVideo ? post.videoUrl ?? null : null
+            const imageUrl = isManaged ? post.image ?? null : null
+            const accent = 'accent' in post ? post.accent : index % 2 ? 'amber' : 'violet'
+
+            return (
+              <article className={`post-card fade-on-scroll ${accent}`} key={'id' in post ? post.id : post.number}>
+                {hasImage ? (
+                  <div className="card-image-wrapper" style={{ position: 'relative', cursor: 'pointer' }} onClick={() => handleExpand({ type: 'image', url: imageUrl ?? '', title: post.title, description: post.description })}>
+                    <img className="card-image" src={imageUrl ?? ''} alt={post.title} />
+                    <button className="video-fullscreen-button" type="button" aria-label="Ampliar imagem" onClick={(e) => { e.stopPropagation(); handleExpand({ type: 'image', url: imageUrl ?? '', title: post.title, description: post.description }) }}>
+                      <Maximize aria-hidden="true" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="video-frame" role="img" aria-label={`Área reservada para o vídeo ${index + 1}`}>
+                    <div className="video-glow" />
+                    <div className="video-lines" />
+                    {videoUrl ? (
+                      <button className="play-button" type="button" aria-label={`Ampliar vídeo ${index + 1}`} onClick={() => handleExpand({ type: 'video', url: videoUrl, title: post.title, description: post.description })}>
+                        <Play fill="currentColor" aria-hidden="true" />
+                      </button>
+                    ) : (
+                      <button className="play-button" type="button" aria-label={`Reproduzir vídeo ${index + 1}`}>
+                        <Play fill="currentColor" aria-hidden="true" />
+                      </button>
+                    )}
+                    <span className="video-label">{videoUrl ? 'ASSISTIR AO VÍDEO' : 'SEU VÍDEO AQUI'}</span>
+                    {videoUrl && (
+                      <button className="video-fullscreen-button" type="button" aria-label="Ampliar vídeo" onClick={() => handleExpand({ type: 'video', url: videoUrl, title: post.title, description: post.description })}>
+                        <Maximize aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                )}
+                <div className="post-copy"><h3>{post.title}</h3><p>{post.description}</p></div>
+              </article>
+            )
           })}
         </div>
         <section className="school-info" aria-labelledby="school-info-title">
@@ -140,6 +206,44 @@ export default function Page() {
           </div>
         </section>
       </section>
+
+      {/* Modal de expansão: card flutuante centralizado com fundo desfocado */}
+      {expanded && (
+        <div
+          className="video-expand-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Conteúdo ampliado: ${expanded.title}`}
+          onMouseDown={(e) => { if (e.target === e.currentTarget) handleCloseExpand() }}
+        >
+          <div className="video-expand-card" onClick={(e) => e.stopPropagation()}>
+            <button className="video-expand-close" type="button" onClick={handleCloseExpand} aria-label="Fechar">
+              <X aria-hidden="true" />
+            </button>
+
+            <div className="video-expand-media">
+              {expanded.type === 'video' ? (
+                <video
+                  src={expanded.url}
+                  autoPlay
+                  controls
+                  playsInline
+                  controlsList="nodownload noplaybackrate"
+                  disablePictureInPicture
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+              ) : (
+                <img src={expanded.url} alt={expanded.title} />
+              )}
+            </div>
+
+            <div className="video-expand-info">
+              <h3>{expanded.title}</h3>
+              {expanded.description && <p>{expanded.description}</p>}
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   )
