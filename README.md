@@ -11,36 +11,47 @@ pnpm dev
 
 Abra http://localhost:3000.
 
-## Publicando no banco de dados (produção)
+## Publicando no banco de dados (Supabase)
 
 O site usa **PostgreSQL** com **Drizzle ORM**. Enquanto não houver `DATABASE_URL`, os cards
 são salvos em `data/cards.json` (modo de desenvolvimento). Ao configurar o banco, tudo passa
 a ser gravado e lido de lá automaticamente — nenhuma alteração de código é necessária.
 
-### 1. Criar o banco
+### 1. Criar o projeto no Supabase
 
-1. Crie um banco PostgreSQL gratuito em [Neon](https://neon.tech) ou [Supabase](https://supabase.com);
-2. Copie a string de conexão.
-3. Rode o schema no banco:
+1. Crie uma conta gratuita em [supabase.com](https://supabase.com) e crie um projeto;
+2. Aguarde o provisionamento terminar;
+3. Aplique o schema da tabela `project_cards` — duas opções:
+   - **Pelo dashboard:** copie o conteúdo de `data/schema.sql` e cole no
+     **SQL Editor** do Supabase, clicando em **Run**; *ou*
+   - **Pelo terminal:** `pnpm db:push` (após configurar `DATABASE_URL` no passo 2).
 
-```bash
-psql "postgresql://usuario:senha@host:5432/nomedobanco?sslmode=require" -f data/schema.sql
+### 2. Pegar a string de conexão
+
+No Supabase: **Project Settings → Database → Connection string → URI**.
+
+Use a conexão **Pooler** (porta `6543`) para deploys serverless (Vercel):
+
+```
+postgresql://postgres.<REF-DO-PROJETO>:<SUA-SENHA>@aws-0-<regiao>.pooler.supabase.com:6543/postgres?sslmode=require
 ```
 
-### 2. Configurar as variáveis de ambiente
+> Neon/Railway também funcionam: é uma string PostgreSQL padrão com `?sslmode=require`.
+
+### 3. Configurar as variáveis de ambiente
 
 Copie `.env.example` para `.env.local` e preencha:
 
 | Variável                | Uso                                                                 |
 | ----------------------- | ------------------------------------------------------------------- |
-| `DATABASE_URL`          | Conexão PostgreSQL. Ativa o modo banco nas rotas `/api/cards`.       |
+| `DATABASE_URL`          | String de conexão do Supabase (passo 2). Ativa o modo banco em `/api/cards`. |
 | `BLOB_READ_WRITE_TOKEN` | Uploads na nuvem (Vercel Blob). Obrigatório em produção serverless. |
 
 > Sem `BLOB_READ_WRITE_TOKEN`, os uploads vão para `public/uploads`, que funciona apenas
 > localmente (sistemas serverless são efêmeros). Para produzir o token: **Vercel → Storage →
 > Create Database → Blob**, e o token é adicionado ao projeto automaticamente.
 
-### 3. Fazer o deploy
+### 4. Fazer o deploy
 
 ```bash
 pnpm build

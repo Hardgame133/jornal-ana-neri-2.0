@@ -1,6 +1,7 @@
 -- Schema do banco de dados — Jornal Escolar Ana Neri
--- Execute este arquivo no seu banco PostgreSQL (Neon, Supabase, Railway, etc.)
--- Exemplo (Neon): psql "URL_DE_CONEXÃO" -f data/schema.sql
+-- Execute este arquivo no seu banco PostgreSQL (Supabase, Neon, Railway, etc.)
+-- Supabase: Dashboard → SQL Editor → cole todo este arquivo e clique em "Run".
+-- No terminal: pnpm db:push  (ou psql "$DATABASE_URL" -f data/schema.sql)
 
 CREATE TABLE IF NOT EXISTS project_cards (
   id          BIGSERIAL PRIMARY KEY,
