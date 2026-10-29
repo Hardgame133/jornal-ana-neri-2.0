@@ -24,11 +24,17 @@ const pool = new pg.Pool({
 })
 
 try {
-  await pool.query(sql)
-  console.log('✓ Schema aplicado com sucesso (tabela project_cards pronta).')
-} catch (error) {
-  console.error('✗ Erro ao aplicar o schema:', error.message)
-  process.exitCode = 1
+  // Bootstrap idempotente: se a tabela já existe e é acessível, nada a fazer.
+  await pool.query('SELECT id FROM project_cards LIMIT 1')
+  console.log('✓ Tabela project_cards já existe e está acessível. Nada a alterar.')
+} catch (bootstrapCaught) {
+  try {
+    await pool.query(sql)
+    console.log('✓ Schema aplicado com sucesso (tabela project_cards pronta).')
+  } catch (error) {
+    console.error('✗ Erro ao aplicar o schema:', error.message)
+    process.exitCode = 1
+  }
 } finally {
   await pool.end()
 }
