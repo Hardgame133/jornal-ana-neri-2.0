@@ -35,9 +35,32 @@ export default function Page() {
   const [accessCode, setAccessCode] = useState('')
   const [codeVisible, setCodeVisible] = useState(false)
   const [codeError, setCodeError] = useState(false)
+  const [checkingCode, setCheckingCode] = useState(false)
   const [active, setActive] = useState('Início')
   const [managedCards, setManagedCards] = useState<ManagedCard[]>([])
   const [expanded, setExpanded] = useState<ExpandedItem>(null)
+
+  // Login: o código é verificado no servidor (/api/login), que responde com um
+  // cookie HttpOnly assinado — protegendo /admin e as rotas de escrita da API.
+  const submitAccessCode = async () => {
+    setCheckingCode(true)
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: accessCode }),
+      })
+      if (response.ok) {
+        window.location.href = '/admin'
+      } else {
+        setCodeError(true)
+      }
+    } catch {
+      setCodeError(true)
+    } finally {
+      setCheckingCode(false)
+    }
+  }
 
   useEffect(() => { fetch('/api/cards').then((response) => response.json()).then((data) => setManagedCards(data.filter((card: ManagedCard) => card.isHome).slice(0, 2))) }, [])
 
@@ -130,9 +153,11 @@ export default function Page() {
             <img className="access-icon" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyDTSI21jihojTcqWZ6gXO8v6l2n69.png" alt="" />
             <h2 id="login-title">Código de Acesso</h2>
             <p className="access-description">Digite o código para continuar</p>
-            <label className={`access-input ${codeError ? 'has-error' : ''}`}><LockKeyhole aria-hidden="true" /><input type={codeVisible ? 'text' : 'password'} inputMode="numeric" maxLength={4} value={accessCode} onChange={(event) => { setAccessCode(event.target.value.replace(/\D/g, '')); setCodeError(false) }} placeholder="Digite o código..." aria-label="Código de acesso" aria-invalid={codeError} /><button className="code-visibility" type="button" aria-label={codeVisible ? 'Ocultar código' : 'Mostrar código'} onClick={() => setCodeVisible((visible) => !visible)}>{codeVisible ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}</button></label>
+            <label className={`access-input ${codeError ? 'has-error' : ''}`}><LockKeyhole aria-hidden="true" /><input type={codeVisible ? 'text' : 'password'} inputMode="numeric" maxLength={4} value={accessCode} onChange={(event) => { setAccessCode(event.target.value.replace(/\D/g, '')); setCodeError(false) }} onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); if (!checkingCode) submitAccessCode() } }} placeholder="Digite o código..." aria-label="Código de acesso" aria-invalid={codeError} autoFocus /><button className="code-visibility" type="button" aria-label={codeVisible ? 'Ocultar código' : 'Mostrar código'} onClick={() => setCodeVisible((visible) => !visible)}>{codeVisible ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}</button></label>
             {codeError && <p className="access-error" role="alert">Código incorreto. Tente novamente.</p>}
-            <button className="access-submit" type="button" onClick={() => { if (accessCode === '1554') { window.location.href = '/admin' } else { setCodeError(true) } }}>Entrar <ArrowRight aria-hidden="true" /></button>
+            <form className="access-submit-form" onSubmit={(event) => { event.preventDefault(); if (!checkingCode) submitAccessCode() }}>
+              <button className="access-submit" type="submit" disabled={checkingCode}>{checkingCode ? 'Verificando...' : <>Entrar <ArrowRight aria-hidden="true" /></>}</button>
+            </form>
           </section>
         </div>
       )}

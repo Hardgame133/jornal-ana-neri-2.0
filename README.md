@@ -11,27 +11,32 @@ pnpm dev
 
 Abra http://localhost:3000.
 
-## Publicando no banco de dados (MongoDB Atlas)
+## Publicando no banco de dados (Supabase)
 
-O site usa **MongoDB Atlas**. Enquanto não houver `MONGODB_URI`, os cards
+O site usa **PostgreSQL** com **Drizzle ORM**. Enquanto não houver `DATABASE_URL`, os cards
 são salvos em `data/cards.json` (modo de desenvolvimento). Ao configurar o banco, tudo passa
 a ser gravado e lido de lá automaticamente — nenhuma alteração de código é necessária.
 
-### 1. Criar o cluster no Atlas
+### 1. Criar o projeto no Supabase
 
-1. Crie uma conta gratuita em [cloud.mongodb.com](https://cloud.mongodb.com) e crie um cluster (M0 grátis);
-2. **Network Access** → *Add IP Address* → permita o IP da sua máquina (na Vercel, use `0.0.0.0/0`);
-3. **Database Access** → crie o usuário e a senha que serão usados na conexão.
+1. Crie uma conta gratuita em [supabase.com](https://supabase.com) e crie um projeto;
+2. Aguarde o provisionamento terminar;
+3. Aplique o schema da tabela `project_cards` — duas opções:
+   - **Pelo dashboard:** copie o conteúdo de `data/schema.sql` e cole no
+     **SQL Editor** do Supabase, clicando em **Run**; *ou*
+   - **Pelo terminal:** `pnpm db:push` (após configurar `DATABASE_URL` no passo 2).
 
 ### 2. Pegar a string de conexão
 
-No Atlas: **Connect → Drivers** e copie a string no formato:
+No Supabase: **Project Settings → Database → Connection string → URI**.
+
+Use a conexão **Pooler** (porta `6543`) para deploys serverless (Vercel):
 
 ```
-mongodb+srv://<USUARIO>:<SENHA>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+postgresql://postgres.<REF-DO-PROJETO>:<SUA-SENHA>@aws-0-<regiao>.pooler.supabase.com:6543/postgres?sslmode=require
 ```
 
-Substitua `<USUARIO>` e `<SENHA>` pelos dados criados no passo 1.
+> Neon/Railway também funcionam: é uma string PostgreSQL padrão com `?sslmode=require`.
 
 ### 3. Configurar as variáveis de ambiente
 
@@ -39,26 +44,14 @@ Copie `.env.example` para `.env.local` e preencha:
 
 | Variável                | Uso                                                                 |
 | ----------------------- | ------------------------------------------------------------------- |
-| `MONGODB_URI`           | Connection string do Atlas (passo 2). Ativa o modo banco em `/api/cards`. |
+| `DATABASE_URL`          | String de conexão do Supabase (passo 2). Ativa o modo banco em `/api/cards`. |
 | `BLOB_READ_WRITE_TOKEN` | Uploads na nuvem (Vercel Blob). Obrigatório em produção serverless. |
 
 > Sem `BLOB_READ_WRITE_TOKEN`, os uploads vão para `public/uploads`, que funciona apenas
 > localmente (sistemas serverless são efêmeros). Para produzir o token: **Vercel → Storage →
 > Create Database → Blob**, e o token é adicionado ao projeto automaticamente.
 
-Depois crie os índices da coleção `cards`:
-
-```bash
-pnpm db:push
-```
-
-Os cards padrão são criados automaticamente no primeiro acesso ao site (ou em `/admin`).
-
-> Sem `BLOB_READ_WRITE_TOKEN`, os uploads vão para `public/uploads`, que funciona apenas
-> localmente (sistemas serverless são efêmeros). Para produzir o token: **Vercel → Storage →
-> Create Database → Blob**, e o token é adicionado ao projeto automaticamente.
-
-### Deploy
+### 4. Fazer o deploy
 
 ```bash
 pnpm build
