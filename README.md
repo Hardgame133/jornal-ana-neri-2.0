@@ -58,7 +58,10 @@ pnpm build
 ```
 
 Opções:
-- **Vercel (recomendado):** conecte o repositório em vercel.com e adicione as duas variáveis de ambiente acima nas configurações do projeto.
+- **Vercel (recomendado):** conecte o repositório em vercel.com e configure nas variáveis do projeto:
+  - `DATABASE_URL` — mesma URL do pooler, com a **porta trocada para `6543`** (o indicado para funções serverless);
+  - `ADMIN_ACCESS_CODE` e `ADMIN_ACCESS_SECRET` — código do painel e segredo do cookie;
+  - `BLOB_READ_WRITE_TOKEN` — gerado automaticamente em **Vercel → Storage → Create Database → Blob**.
 - Outro host: rode `pnpm build && pnpm start` com as variáveis configuradas.
 
 ## Funcionamento dos cards
